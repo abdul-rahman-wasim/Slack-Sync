@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SlackSync
+
+A real-time team chat application built with Next.js 15 and Supabase. Supports workspaces, channels, direct messages, file sharing, and online presence.
+
+## Tech Stack
+
+| Layer | Tool |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS + shadcn/ui |
+| Backend | Supabase (Auth, Database, Realtime, Storage) |
+| Client state | Zustand |
+| Server state | TanStack Query |
+| Forms | React Hook Form + Zod |
+| Testing | Jest + React Testing Library |
+| CI/CD | GitHub Actions |
+| Hosting | Vercel |
+
+## Features
+
+- Magic link and Google OAuth authentication
+- Workspaces with public and private channels
+- Real-time messaging via Supabase Realtime (Postgres Changes)
+- Direct messages between workspace members
+- File and image sharing via Supabase Storage
+- Online presence and typing indicators
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- A Supabase project ([supabase.com](https://supabase.com))
+- A Google OAuth app (for Google sign-in)
+
+### Environment Variables
+
+Create a `.env.local` file in the project root:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key
+SUPABASE_SERVICE_ROLE_KEY=your_secret_key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── (auth)/login/         # Login page (magic link + Google OAuth)
+│   ├── (app)/                # Protected app routes
+│   └── auth/callback/        # OAuth + magic link callback handler
+├── components/
+│   ├── auth/                 # Auth UI components
+│   └── ui/                   # shadcn/ui components
+├── lib/
+│   ├── actions/              # Server Actions (auth, messages, etc.)
+│   └── supabase/             # Supabase client files (browser, server, middleware)
+└── hooks/                    # Custom React hooks
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev       # Start development server
+npm test          # Run tests
+npm run build     # Production build
+npx tsc --noEmit  # Type check
+```
