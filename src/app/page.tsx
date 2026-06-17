@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import AuthErrorBanner from '@/components/auth/AuthErrorBanner'
 
 export default async function LandingPage() {
   const supabase = await createClient()
@@ -21,6 +22,8 @@ export default async function LandingPage() {
             all in one place.
           </p>
         </div>
+
+        <AuthErrorBanner />
 
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Button asChild size="lg">
