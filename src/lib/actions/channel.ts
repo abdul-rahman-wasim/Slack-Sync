@@ -40,3 +40,17 @@ export async function deleteChannel(channelId: string, workspaceSlug: string) {
   redirect(`/workspace/${workspaceSlug}`)
 }
 
+export async function leaveChannel(channelId: string, workspaceSlug: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { error } = await supabase
+    .from('channel_members')
+    .delete()
+    .eq('channel_id', channelId)
+    .eq('user_id', user.id)
+
+  if (error) throw new Error(error.message)
+  redirect(`/workspace/${workspaceSlug}`)
+}
