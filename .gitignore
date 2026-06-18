@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local-only docs
 /docs/
+
+# supabase CLI local cache (linked project info, version metadata)
+/supabase/.temp/
