@@ -39,7 +39,7 @@ export default async function WorkspaceLayout({
   return (
     <div className="flex h-screen">
       <aside className="w-64 border-r bg-gray-50 flex flex-col">
-        <WorkspaceHeader name={workspace.name} memberCount={memberCount ?? 0} />
+        <WorkspaceHeader name={workspace.name} memberCount={memberCount ?? 0} workspaceId={workspace.id} />
         <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} />
         <ChannelList channels={channels ?? []} workspaceId={workspace.id} workspaceSlug={slug} />
       </aside>

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { workspaceSchema } from '@/lib/validations'
 import { redirect } from 'next/navigation'
 import { getDefaultWorkspaceRedirect } from '../workspace'
+import { revalidatePath } from 'next/cache'
 
 type WorkspaceState = { error?: string } | null
 type AddMemberState = { error?: string; success?: boolean } | null
@@ -54,8 +55,9 @@ export async function addWorkspaceMember(prevState: AddMemberState, formData: Fo
     _username: username,
   })
 
-  if (error) return { error: error.message }
-  return { success: true }
+ if (error) return { error: error.message }
+  revalidatePath('/workspace/[slug]', 'layout')
+  return { success: true} 
 }
 
 export async function leaveWorkspace(workspaceId: string) {
@@ -63,12 +65,17 @@ export async function leaveWorkspace(workspaceId: string) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('workspace_members')
     .delete()
     .eq('workspace_id', workspaceId)
     .eq('user_id', user.id)
+    .select()
 
   if (error) throw new Error(error.message)
+  if (!data || data.length === 0) {
+    throw new Error('Workspace owners cannot leave — delete the workspace instead.')
+  }
+
   redirect(await getDefaultWorkspaceRedirect(supabase))
 }

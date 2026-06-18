@@ -2,13 +2,14 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import MessageList from '@/components/chat/MessageList'
 import MessageInput from '@/components/chat/MessageInput'
+import LeaveChannelButton from '@/components/chat/LeaveChannelButton'
 
 export default async function ChannelPage({
   params,
 }: {
   params: Promise<{ slug: string; id: string }>
 }) {
-  const { id } = await params
+  const { id, slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
@@ -50,11 +51,14 @@ export default async function ChannelPage({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-b px-4 py-3">
-        <h2 className="font-semibold text-gray-900">
-          {channel.is_private ? '🔒' : '#'} {channel.name}
-        </h2>
-        <p className="text-xs text-gray-500">{members?.length ?? 0} members</p>
+      <div className="flex items-center justify-between border-b px-4 py-3">
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            {channel.is_private ? '🔒' : '#'} {channel.name}
+          </h2>
+          <p className="text-xs text-gray-500">{members?.length ?? 0} members</p>
+        </div>
+        <LeaveChannelButton channelId={id} workspaceSlug={slug} />
       </div>
       <MessageList
         channelId={id}

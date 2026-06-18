@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { channelSchema } from '@/lib/validations'
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 type ChannelState = { error?: string } | null
@@ -30,8 +31,8 @@ export async function createChannel(prevState: ChannelState, formData: FormData)
     return { error: error.message }
   }
 
-  redirect(`/workspace/${workspaceSlug}/channel/${data.id}`)
-}
+  revalidatePath(`/workspace/${workspaceSlug}`, 'layout')
+  redirect(`/workspace/${workspaceSlug}/channel/${data.id}`)}
 
 export async function deleteChannel(channelId: string, workspaceSlug: string) {
   const supabase = await createClient()
