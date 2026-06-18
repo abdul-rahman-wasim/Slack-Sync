@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { createClient } from '@/lib/supabase/client'
+import { RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 
 export type Message = {
   id: string
@@ -29,7 +30,7 @@ export function useMessages(channelId: string, initialMessages: Message[]) {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `channel_id=eq.${channelId}` },
-        (payload) => {
+         (payload: RealtimePostgresChangesPayload<Message>) => {
           queryClient.setQueryData<Message[]>(['messages', channelId], (old) => [
             ...(old ?? []),
             payload.new as Message,
