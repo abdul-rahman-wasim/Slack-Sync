@@ -3,12 +3,13 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import AuthErrorBanner from '@/components/auth/AuthErrorBanner'
+import { getDefaultWorkspaceRedirect } from '@/lib/workspace'
 
 export default async function LandingPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (user) redirect('/onboarding')
+if (user) redirect(await getDefaultWorkspaceRedirect(supabase))
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
