@@ -24,20 +24,6 @@ export default function ChannelList({
       </div>
 
       <nav className="flex flex-col gap-0.5">
-        {/* {channels.map((channel) => (
-          <Link
-            key={channel.id}
-            href={`/workspace/${workspaceSlug}/channel/${channel.id}`}
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-200"
-          >
-            {channel.is_private ? (
-              <Lock className="h-3.5 w-3.5 text-gray-400" />
-            ) : (
-              <Hash className="h-3.5 w-3.5 text-gray-400" />
-            )}
-            <span className="truncate">{channel.name}</span>
-          </Link>
-        ))} */}
         {channels.map((channel) => (
             <ChannelListItem key={channel.id} channel={channel} workspaceSlug={workspaceSlug} />
         ))}

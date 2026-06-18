@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import WorkspaceSwitcher from '@/components/workspace/sidebar/WorkspaceSwitcher'
 import ChannelList from '@/components/workspace/sidebar/ChannelList'
+import WorkspaceHeader from '@/components/workspace/sidebar/WorkspaceHeader'
 
 export default async function WorkspaceLayout({
   children,
@@ -30,9 +31,15 @@ export default async function WorkspaceLayout({
     .select('id, name, is_private')
     .eq('workspace_id', workspace.id)
 
+  const { count: memberCount } = await supabase
+    .from('workspace_members')
+    .select('*', { count: 'exact', head: true })
+    .eq('workspace_id', workspace.id)
+
   return (
     <div className="flex h-screen">
       <aside className="w-64 border-r bg-gray-50 flex flex-col">
+        <WorkspaceHeader name={workspace.name} memberCount={memberCount ?? 0} />
         <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} />
         <ChannelList channels={channels ?? []} workspaceId={workspace.id} workspaceSlug={slug} />
       </aside>
