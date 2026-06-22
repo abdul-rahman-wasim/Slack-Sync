@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import WorkspaceSwitcher from '@/components/workspace/sidebar/WorkspaceSwitcher'
 import ChannelList from '@/components/workspace/sidebar/ChannelList'
 import WorkspaceHeader from '@/components/workspace/sidebar/WorkspaceHeader'
+import UserFooter from '@/components/workspace/sidebar/UserFooter'
 
 export default async function WorkspaceLayout({
   children,
@@ -42,6 +43,8 @@ export default async function WorkspaceLayout({
         <WorkspaceHeader name={workspace.name} memberCount={memberCount ?? 0} workspaceId={workspace.id} />
         <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} />
         <ChannelList channels={channels ?? []} workspaceId={workspace.id} workspaceSlug={slug} />
+        <div className="flex-1" />
+        <UserFooter />
       </aside>
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>

@@ -8,6 +8,11 @@ const emailSchema = z.object({
   email: z.email('Please enter a valid email address'),
 })
 
+function getAuthCallbackUrl() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? ''
+  return `${siteUrl}/auth/callback`
+}
+
 type MagicLinkState = { error?: string; email?: string; success?: boolean } | null
 
 export async function sendMagicLink(prevState: MagicLinkState, formData: FormData) {
@@ -23,7 +28,7 @@ export async function sendMagicLink(prevState: MagicLinkState, formData: FormDat
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      emailRedirectTo: getAuthCallbackUrl(),
     },
   })
 
@@ -37,9 +42,15 @@ export async function signInWithGoogle() {
   const { data } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      redirectTo: getAuthCallbackUrl(),
     },
   })
 
   if (data.url) redirect(data.url)
+}
+
+export async function signOut() {
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+  redirect('/login')
 }
