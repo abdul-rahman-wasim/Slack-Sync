@@ -1,16 +1,21 @@
+'use client'
+
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import WorkspaceListItem from './WorkspaceListItem'
-
-type Workspace = { id: string; name: string; slug: string }
+import { useWorkspaces, type Workspace } from '@/hooks/useWorkspaces'
 
 export default function WorkspaceSwitcher({
   workspaces,
   currentSlug,
+  userId,
 }: {
   workspaces: Workspace[]
   currentSlug: string
+  userId: string
 }) {
+  const { data: liveWorkspaces } = useWorkspaces(userId, workspaces)
+
   return (
     <div className="flex flex-col gap-1 p-3">
       <div className="flex items-center justify-between px-2 pb-1">
@@ -26,7 +31,7 @@ export default function WorkspaceSwitcher({
       </div>
 
       <nav className="flex flex-col gap-0.5">
-        {workspaces.map((ws) => (
+        {liveWorkspaces?.map((ws) => (
           <WorkspaceListItem key={ws.id} workspace={ws} isActive={ws.slug === currentSlug} />
         ))}
       </nav>

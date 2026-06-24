@@ -14,6 +14,8 @@ export default async function WorkspaceLayout({
 }) {
   const { slug } = await params
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
 
   const { data: workspace } = await supabase
     .from('workspaces')
@@ -41,7 +43,7 @@ export default async function WorkspaceLayout({
     <div className="flex h-screen">
       <aside className="w-64 border-r bg-gray-50 flex flex-col">
         <WorkspaceHeader name={workspace.name} memberCount={memberCount ?? 0} workspaceId={workspace.id} />
-        <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} />
+        <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} userId={user.id} />
         <ChannelList channels={channels ?? []} workspaceId={workspace.id} workspaceSlug={slug} />
         <div className="flex-1" />
         <UserFooter />
