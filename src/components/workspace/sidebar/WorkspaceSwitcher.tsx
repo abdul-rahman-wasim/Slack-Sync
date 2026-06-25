@@ -1,24 +1,35 @@
 'use client'
 
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { LogOut, Plus } from 'lucide-react'
 import { colorFor, initials } from '@/lib/avatar'
 import { useWorkspaces, type Workspace } from '@/hooks/useWorkspaces'
+import { signOut } from '@/lib/actions/auth'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 export default function WorkspaceSwitcher({
   workspaces,
   currentSlug,
   userId,
+  username,
 }: {
   workspaces: Workspace[]
   currentSlug: string
   userId: string
+  username: string
 }) {
   const { data: liveWorkspaces } = useWorkspaces(userId, workspaces)
 
@@ -59,6 +70,31 @@ export default function WorkspaceSwitcher({
           </TooltipTrigger>
           <TooltipContent side="right">Create a workspace</TooltipContent>
         </Tooltip>
+
+        <div className="mt-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white ring-2 ring-transparent transition hover:ring-rail-muted"
+                style={{ backgroundColor: colorFor(username) }}
+              >
+                {initials(username)}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="right" align="end" className="w-56">
+              <DropdownMenuLabel>
+                <p className="text-xs font-normal text-muted-foreground">@{username}</p>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => signOut()}
+                className="text-destructive focus:text-destructive"
+              >
+                <LogOut className="h-4 w-4" /> Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </nav>
     </TooltipProvider>
   )
