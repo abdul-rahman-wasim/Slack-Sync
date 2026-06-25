@@ -9,20 +9,28 @@ type Channel = { id: string; name: string; is_private: boolean }
 export default function ChannelListItem({
   channel,
   workspaceSlug,
+  isActive,
 }: {
   channel: Channel
   workspaceSlug: string
+  isActive: boolean
 }) {
   return (
-    <div className="group flex items-center justify-between rounded-md text-sm text-gray-700 hover:bg-gray-200">
+    <div
+      className={`group flex items-center justify-between rounded-lg text-sm transition ${
+        isActive
+          ? 'bg-sidebar-primary font-semibold text-sidebar-primary-foreground'
+          : 'text-sidebar-foreground hover:bg-sidebar-accent'
+      }`}
+    >
       <Link
         href={`/workspace/${workspaceSlug}/channel/${channel.id}`}
-        className="flex flex-1 items-center gap-2 px-2 py-1.5"
+        className="flex flex-1 items-center gap-2 px-3 py-1.5"
       >
         {channel.is_private ? (
-          <Lock className="h-3.5 w-3.5 text-gray-400" />
+          <Lock className="h-3.5 w-3.5 shrink-0 opacity-70" />
         ) : (
-          <Hash className="h-3.5 w-3.5 text-gray-400" />
+          <Hash className="h-3.5 w-3.5 shrink-0 opacity-70" />
         )}
         <span className="truncate">{channel.name}</span>
       </Link>
@@ -32,7 +40,10 @@ export default function ChannelListItem({
             deleteChannel(channel.id, workspaceSlug)
           }
         }}
-        className="mr-1 rounded p-1 opacity-0 hover:bg-red-100 hover:text-red-600 group-hover:opacity-100"
+        aria-label={`Delete #${channel.name}`}
+        className={`mr-1 rounded p-1 opacity-0 transition hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100 ${
+          isActive ? 'text-sidebar-primary-foreground' : ''
+        }`}
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>

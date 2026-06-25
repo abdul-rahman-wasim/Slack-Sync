@@ -1,14 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import { Send } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
 
 export default function MessageInput({ channelId, userId }: { channelId: string; userId: string }) {
   const [content, setContent] = useState('')
   const supabase = createClient()
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function send() {
     const trimmed = content.trim()
     if (!trimmed) return
 
@@ -22,19 +23,31 @@ export default function MessageInput({ channelId, userId }: { channelId: string;
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 border-t p-3">
-      <input
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Message..."
-        className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
-      />
-      <button
-        type="submit"
-        className="rounded-md bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800"
-      >
-        Send
-      </button>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        send()
+      }}
+      className="border-t border-border p-4"
+    >
+      <div className="flex items-end gap-2 rounded-2xl border border-input bg-background px-3 py-2 shadow-soft focus-within:ring-2 focus-within:ring-ring/40">
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault()
+              send()
+            }
+          }}
+          rows={1}
+          placeholder="Message..."
+          className="max-h-40 flex-1 resize-none bg-transparent py-1.5 text-sm outline-none placeholder:text-muted-foreground"
+        />
+        <Button type="submit" size="icon" disabled={!content.trim()} className="h-9 w-9 shrink-0">
+          <Send className="h-4 w-4" />
+        </Button>
+      </div>
     </form>
   )
 }

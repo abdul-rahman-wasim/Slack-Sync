@@ -2,6 +2,7 @@
 
 import { LogOut } from 'lucide-react'
 import { leaveChannel } from '@/lib/actions/channel'
+import { Button } from '@/components/ui/button'
 
 export default function LeaveChannelButton({
   channelId,
@@ -11,16 +12,17 @@ export default function LeaveChannelButton({
   workspaceSlug: string
 }) {
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={() => {
         if (confirm('Leave this channel?')) {
           leaveChannel(channelId, workspaceSlug)
         }
       }}
-      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600"
+      className="text-muted-foreground hover:text-destructive"
     >
-      <LogOut className="h-3 w-3" />
-      Leave
-    </button>
+      <LogOut className="h-4 w-4" /> Leave
+    </Button>
   )
 }

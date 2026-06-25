@@ -1,4 +1,3 @@
-import { Users } from 'lucide-react'
 import AddMemberDialog from './AddMemberDialog'
 import LeaveWorkspaceButton from './LeaveWorkspaceButton'
 
@@ -12,16 +11,15 @@ export default function WorkspaceHeader({
   memberCount: number
 }) {
   return (
-    <div className="border-b px-4 py-3">
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-gray-900">{name}</h2>
-        <AddMemberDialog workspaceId={workspaceId} />
+    <div className="flex items-center justify-between border-b border-sidebar-border px-4 py-3.5">
+      <div className="min-w-0">
+        <h2 className="truncate font-display text-base font-bold leading-tight">{name}</h2>
+        <p className="text-xs text-muted-foreground">
+          {memberCount} {memberCount === 1 ? 'member' : 'members'}
+        </p>
       </div>
-      <div className="mt-1 flex items-center justify-between">
-        <div className="flex items-center gap-1 text-xs text-gray-500">
-          <Users className="h-3 w-3" />
-          <span>{memberCount} {memberCount === 1 ? 'member' : 'members'}</span>
-        </div>
+      <div className="flex items-center gap-1">
+        <AddMemberDialog workspaceId={workspaceId} />
         <LeaveWorkspaceButton workspaceId={workspaceId} />
       </div>
     </div>

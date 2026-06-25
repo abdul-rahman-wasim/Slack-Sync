@@ -41,11 +41,10 @@ export default async function WorkspaceLayout({
 
   return (
     <div className="flex h-screen">
-      <aside className="w-64 border-r bg-gray-50 flex flex-col">
+      <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} userId={user.id} />
+      <aside className="flex w-72 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
         <WorkspaceHeader name={workspace.name} memberCount={memberCount ?? 0} workspaceId={workspace.id} />
-        <WorkspaceSwitcher workspaces={workspaces ?? []} currentSlug={slug} userId={user.id} />
         <ChannelList channels={channels ?? []} workspaceId={workspace.id} workspaceSlug={slug} />
-        <div className="flex-1" />
         <UserFooter />
       </aside>
       <main className="flex-1 overflow-y-auto">{children}</main>

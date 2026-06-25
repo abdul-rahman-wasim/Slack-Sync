@@ -7,7 +7,8 @@ export default function SignOutButton() {
   return (
     <button
       onClick={() => signOut()}
-      className="rounded p-1 text-gray-400 hover:bg-gray-200 hover:text-red-600"
+      aria-label="Sign out"
+      className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
     >
       <LogOut className="h-4 w-4" />
     </button>

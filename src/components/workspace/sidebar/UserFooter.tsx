@@ -13,8 +13,8 @@ export default async function UserFooter() {
     .single()
 
   return (
-    <div className="flex items-center justify-between border-t px-4 py-3">
-      <span className="text-sm text-gray-700">@{profile?.username}</span>
+    <div className="flex items-center justify-between border-t border-sidebar-border px-4 py-3">
+      <span className="text-sm text-sidebar-foreground">@{profile?.username}</span>
       <SignOutButton />
     </div>
   )

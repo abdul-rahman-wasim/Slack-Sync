@@ -11,10 +11,10 @@ export default function LeaveWorkspaceButton({ workspaceId }: { workspaceId: str
           leaveWorkspace(workspaceId)
         }
       }}
-      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-600"
+      aria-label="Leave workspace"
+      className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
     >
-      <LogOut className="h-3 w-3" />
-      Leave
+      <LogOut className="h-4 w-4" />
     </button>
   )
 }

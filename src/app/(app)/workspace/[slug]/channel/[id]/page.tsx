@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { Hash, Lock } from 'lucide-react'
 import MessageList from '@/components/chat/MessageList'
 import MessageInput from '@/components/chat/MessageInput'
 import LeaveChannelButton from '@/components/chat/LeaveChannelButton'
@@ -50,16 +51,19 @@ export default async function ChannelPage({
   )
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <div>
-          <h2 className="font-semibold text-gray-900">
-            {channel.is_private ? '🔒' : '#'} {channel.name}
-          </h2>
-          <p className="text-xs text-gray-500">{members?.length ?? 0} members</p>
+    <div className="flex h-full flex-col bg-card">
+      <header className="flex items-center justify-between border-b border-border px-6 py-3.5">
+        <div className="flex items-center gap-2.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            {channel.is_private ? <Lock className="h-4 w-4" /> : <Hash className="h-4 w-4" />}
+          </span>
+          <div>
+            <h1 className="font-display text-base font-bold leading-tight">{channel.name}</h1>
+            <p className="text-xs text-muted-foreground">{members?.length ?? 0} members</p>
+          </div>
         </div>
         <LeaveChannelButton channelId={id} workspaceSlug={slug} />
-      </div>
+      </header>
       <MessageList
         channelId={id}
         initialMessages={messages ?? []}
